@@ -381,6 +381,68 @@ public:
       reuse_address;
 #endif
 
+  /// Socket option for the receive time out.
+  /**
+  * Implements the SOL_SOCKET/SO_RCVTIMEO socket option.
+  *
+  * @par Examples
+  * Setting the option:
+  * @code
+  * boost::asio::ip::tcp::socket socket(io_service); 
+  * ...
+  * timeval tv;
+  * tv.tv_sec = 10;
+  * tv.tv_usec = 0;
+  * boost::asio::socket_base::receive_time_out option(tv);
+  * socket.set_option(option);
+  * @endcode
+  *
+  * @par
+  * Getting the current option value:
+  * @code
+  * boost::asio::ip::tcp::socket socket(io_service); 
+  * ...
+  * boost::asio::socket_base::receive_time_out option;
+  * socket.get_option(option);
+  * timeval tv = option.value();
+  * @endcode
+  *
+  * @par Concepts:
+  * Socket_Option, Timeval_Socket_Option.
+  */
+#if defined(GENERATING_DOCUMENTATION)
+  typedef implementation_defined receive_time_out;
+#else
+  typedef boost::asio::detail::socket_option::timeval<
+    BOOST_ASIO_OS_DEF(SOL_SOCKET), BOOST_ASIO_OS_DEF(SO_RCVTIMEO)>
+      receive_time_out;
+#endif
+
+  /// Socket option for the receive low watermark.
+  /**
+  * Implements the SOL_SOCKET/SO_ERROR socket option.
+  *
+  * @par Examples
+  * Getting the current option value:
+  * @code
+  * boost::asio::ip::tcp::socket socket(io_service); 
+  * ...
+  * boost::asio::socket_base::error option;
+  * socket.get_option(option);
+  * int = option.value();
+  * @endcode
+  *
+  * @par Concepts:
+  * Socket_Option, Integer_Socket_Option.
+  */
+#if defined(GENERATING_DOCUMENTATION)
+  typedef implementation_defined error;
+#else
+  typedef boost::asio::detail::socket_option::integer<
+    BOOST_ASIO_OS_DEF(SOL_SOCKET), BOOST_ASIO_OS_DEF(SO_ERROR)>
+      error;
+#endif
+
   /// Socket option to specify whether the socket lingers on close if unsent
   /// data is present.
   /**

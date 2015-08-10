@@ -211,6 +211,111 @@ private:
   int value_;
 };
 
+// Helper template for implementing timeval options.
+template <int Level, int Name>
+class timeval
+{
+public:
+    // Default constructor.
+    timeval()
+    {
+        value_.tv_sec = 0;
+        value_.tv_usec = 0;
+    }
+
+    // Construct with a specific option value.
+    explicit timeval(::timeval v)
+        : value_(v)
+    {
+    }
+
+    // Construct with a specific option value.
+    explicit timeval(long sec, long usec = 0)
+    {
+        value_.tv_sec = sec;
+        value_.tv_usec = usec;
+    }
+
+    // Set the value of the int option.
+    timeval& operator=(::timeval v)
+    {
+        value_ = v;
+        return *this;
+    }
+
+    // Get the current value of the int option.
+    ::timeval value() const
+    {
+        return value_;
+    }
+
+    void sec(long s)
+    {
+        value_.tv_sec = s;
+    }
+
+    void usec(long us)
+    {
+        value_.tv_usec = us;
+    }
+
+    long sec() const
+    {
+        return value_.tv_sec;
+    }
+
+    long usec() const
+    {
+        return value_.tv_usec;
+    }
+
+    // Get the level of the socket option.
+    template <typename Protocol>
+    int level(const Protocol&) const
+    {
+        return Level;
+    }
+
+    // Get the name of the socket option.
+    template <typename Protocol>
+    int name(const Protocol&) const
+    {
+        return Name;
+    }
+
+    // Get the address of the int data.
+    template <typename Protocol>
+    ::timeval* data(const Protocol&)
+    {
+        return &value_;
+    }
+
+    // Get the address of the int data.
+    template <typename Protocol>
+    const ::timeval* data(const Protocol&) const
+    {
+        return &value_;
+    }
+
+    // Get the size of the int data.
+    template <typename Protocol>
+    std::size_t size(const Protocol&) const
+    {
+        return sizeof(value_);
+    }
+
+    // Set the size of the int data.
+    template <typename Protocol>
+    void resize(const Protocol&, std::size_t s)
+    {
+        if (s != sizeof(value_))
+            throw std::length_error("timeval socket option resize");
+    }
+
+private:
+    ::timeval value_;
+};
+
 // Helper template for implementing linger options.
 template <int Level, int Name>
 class linger
