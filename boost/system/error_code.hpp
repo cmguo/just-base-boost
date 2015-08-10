@@ -18,6 +18,7 @@
 #include <boost/utility/enable_if.hpp>
 #include <ostream>
 #include <string>
+#include <vector>
 #include <stdexcept>
 #include <functional>
 
@@ -185,7 +186,8 @@ namespace boost
     class error_category : public noncopyable
     {
     public:
-      virtual ~error_category(){}
+      error_category() { register_category(*this); }
+      virtual ~error_category() { unregister_category(*this); }
 
       virtual const char *     name() const BOOST_SYSTEM_NOEXCEPT = 0;
       virtual std::string      message( int ev ) const = 0;
@@ -201,6 +203,16 @@ namespace boost
       {
         return std::less<const error_category*>()( this, &rhs );
       }
+
+      BOOST_SYSTEM_DECL static std::vector<error_category const *> & get_categories();
+
+      BOOST_SYSTEM_DECL static void register_category(error_category const & cat);
+
+      BOOST_SYSTEM_DECL static void unregister_category(error_category const & cat);
+
+      BOOST_SYSTEM_DECL static error_category const & find_category(char const * name);
+
+      static std::vector<error_category const *> & categories_;
     };
 
     //  predefined error categories  -----------------------------------------//

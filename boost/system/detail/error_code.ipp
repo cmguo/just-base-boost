@@ -17,6 +17,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cassert>
+#include <algorithm>
 
 #include <cstring> // for strerror/strerror_r
 
@@ -461,6 +462,48 @@ namespace
     {
       static const generic_error_category generic_category_const;
       return generic_category_const;
+    }
+
+  } // namespace system
+} // namespace boost
+
+namespace boost
+{
+  namespace system
+  {
+
+    std::vector<error_category const *> & error_category::get_categories()
+    {
+      static std::vector<error_category const *> categories;
+      return categories;
+    }
+
+    std::vector<error_category const *> & error_category::categories_ = error_category::get_categories();
+
+    BOOST_SYSTEM_DECL void error_category::register_category(error_category const & cat)
+    {
+      get_categories().push_back(&cat);
+    }
+
+    BOOST_SYSTEM_DECL void error_category::unregister_category(error_category const & cat)
+    {
+      std::vector<error_category const *> & categories = get_categories();
+      categories.erase(std::remove(categories.begin(), categories.end(), &cat), categories.end());
+      if (categories.empty()) {
+          // 释放内部存储
+          std::vector<error_category const *>().swap(categories);
+      }
+    }
+
+    BOOST_SYSTEM_DECL error_category const & error_category::find_category(char const * name)
+    {
+      std::vector<error_category const *>::const_iterator iter = get_categories().begin();
+      std::vector<error_category const *>::const_iterator end = get_categories().end();
+      for (; iter != end; ++iter)
+          if (strcmp((*iter)->name(), name) == 0)
+              return **iter;
+      assert(false);
+      return get_generic_category();
     }
 
   } // namespace system
