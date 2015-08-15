@@ -245,6 +245,13 @@ public:
     gbump(static_cast<int>(n));
   }
 
+  void reset()
+  {
+      std::size_t pend = buffer_.size();
+      setg(&buffer_[0], &buffer_[0], &buffer_[0]);
+      setp(&buffer_[0], &buffer_[0] + pend);
+  }
+
 protected:
   enum { buffer_delta = 128 };
 
