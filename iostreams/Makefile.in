@@ -40,7 +40,7 @@ PROJECT_INTERNAL_INCLUDES	:=
 
 ## 额外包含目录（多个，相对于包含根目录ROOT_INCLUDE_DIRECTORY）
 
-PROJECT_EXTERNAL_INCLUDES	:= /thirdparty/zlib
+PROJECT_EXTERNAL_INCLUDES	:= /thirdparty/zlib /thirdparty/bzip2-1.0.6
 
 ## 该项目特点的编译选项
 
@@ -54,6 +54,7 @@ PROJECT_LINK_FLAGS		:=
 
 PROJECT_DEPENDS			:= $(PROJECT_DEPENDS) \
 				/thirdparty/zlib \
+				/thirdparty/bzip2-1.0.6 \
 
 ## 该项目特定的引用库
 
