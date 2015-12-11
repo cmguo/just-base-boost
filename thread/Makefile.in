@@ -20,7 +20,7 @@ PROJECT_SOURCE_DIRECTORY	:= $(subst boost,boost/libs,$(LOCAL_NAME)/src)
 
 ## 如果源码目录有子目录，指定子目录的名称（没有指定时，将自动搜索子目录）
 
-ifeq ($(findstring msys mingw,$(PLATFORM_NAME)),)
+ifeq ($(findstring win32,$(PLATFORM_NAME)),)
 PROJECT_SOURCE_SUB_DIRECTORYS	:= pthread
 else
 PROJECT_SOURCE_SUB_DIRECTORYS	:= win32
@@ -44,7 +44,7 @@ PROJECT_EXTERNAL_INCLUDES	:=
 
 ## 该项目特点的编译选项
 
-PROJECT_COMPILE_FLAGS		:=
+PROJECT_COMPILE_FLAGS		:= -DBOOST_THREAD_BUILD_LIB
 
 ## 该项目特点的链接选项
 
