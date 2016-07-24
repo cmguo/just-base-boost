@@ -8,7 +8,7 @@ PROJECT_TARGET			:= boost_iostreams
 
 ## 项目版本号（只要前三位，最后一位自动生成）
 
-PROJECT_VERSION			:= 1.36.0
+PROJECT_VERSION			:=
 
 ## 该项目默认的配置类型
 
